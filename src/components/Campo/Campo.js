@@ -1,6 +1,6 @@
-import './CampoText.css';
+import './Campo.css';
 
-export const CampoText = (props) =>{
+export const Campo = (props) =>{
     
     const metodoDeConcatenacao = `${props.place}...`;
 
@@ -9,9 +9,12 @@ export const CampoText = (props) =>{
     }
 
     return (
-        <div className='campo-texto'>
+        <div 
+            className={`campo campo-${(props.type === undefined ? 'text' : props.type)}`}
+        >
             <label>{props.label}</label>
             <input
+                type={(props.type === undefined ? 'text' : props.type)}
                 onChange={aoDigitado}
                 value={props.valor}
                 name={props.nome}

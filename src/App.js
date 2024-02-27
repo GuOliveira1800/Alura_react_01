@@ -3,6 +3,7 @@ import './App.css';
 import Banner from './components/Banner';
 import Formulario from './components/Formulario';
 import Time from './components/Time';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
 
@@ -13,37 +14,66 @@ function App() {
     setLista([...lista,colabodor])
   }
 
-  const ListaTimes = [
+  const [ListaTimes,setListaTimes] = useState([
     {
+      id: uuidv4(),
       nome: 'Prog',
-      corPrimario: '#57c278',
-      corSecundaria: '#d9f7e9',
+      cor: '#d9f7e9',
     },
     {
+      id: uuidv4(),
       nome: 'Front',
-      corPrimario: '#82cffa',
-      corSecundaria: '#e8f8ff',
+      cor: '#e8f8ff',
     },
     {
+      id: uuidv4(),
       nome: 'Back',
-      corPrimario: '#a6d157',
-      corSecundaria: '#f0f8e2',
+      cor: '#f0f8e2',
     },
     {
+      id: uuidv4(),
       nome: 'Analise',
-      corPrimario: '#e06869',
-      corSecundaria: '#fde7e8',
+      cor: '#fde7e8',
     },
     {
+      id: uuidv4(),
       nome: 'Teste',
-      corPrimario: '#db6ebf',
-      corSecundaria: '#fae9f5',
+      cor: '#fae9f5',
     }
     
-  ]
+  ]);
 
-  const aoDeletar = () =>{
-    
+  const aoNovoTime = (time) =>{
+    //debugger
+    console.log(time);
+    setListaTimes([...ListaTimes,time])
+  }
+
+  const aoDeletar = (id) =>{
+    console.log(id);
+    setLista(lista.filter(pessoa => pessoa.id !== id));
+  }
+
+  function mudaCor(cor,id) {
+    setListaTimes(ListaTimes.map(
+      time => {
+        if (time.id === id) {
+          time.cor = cor;
+        }
+        return time;
+      }
+    ))
+  }
+
+  function favoritar(id) {
+    setLista(lista.map(
+      pessoa => {
+        if (pessoa.id === id) {
+          pessoa.favorita = !pessoa.favorita
+        }
+        return pessoa;
+      }
+    ))
   }
 
   return (
@@ -54,17 +84,18 @@ function App() {
       <Formulario 
         times ={ListaTimes.map(times => times.nome)}
         aoColaboradorCadastrado={colabodor => aoNovoColaborador(colabodor)}
+        aoNovoTime = {time => aoNovoTime(time)}
       />      
       {
         ListaTimes.map((times,indice) =>{
           return (
             <Time 
               key={indice} 
-              nome={times.nome} 
-              corPrimario={times.corPrimario} 
-              corSecundaria={times.corSecundaria}
+              times={times}
               listaPessoa={lista.filter(colaborador => colaborador.timeNome === times.nome)}
+              mudarCor={mudaCor}
               aoDeletar={aoDeletar}
+              aoFavoritar={favoritar}
             />
           )
         })
